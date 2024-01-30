@@ -1,42 +1,39 @@
-"use client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { storage } from "@/db/firebase";
 
-export default function Home() {
-  const [data, setData] = useState("");
+export default async function Home() {
+  const imagesRef = ref(storage, "/");
 
-  async function handleSubmit() {
-    try {
-      const res = await fetch("/api/screenshot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        console.log(data);
-      } else {
-        console.log("Failed");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const res = await listAll(imagesRef);
+  const urls = await Promise.all(
+    res.items
+      .map(async (imageRef) => {
+        try {
+          const url = await getDownloadURL(imageRef);
+          return url;
+        } catch (error) {
+          console.error("Error fetching image URL:", error);
+          return null;
+        }
+      })
+      .filter((url) => url !== null)
+  );
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-bold text-center">Hello World</h1>
-        <Input
-          type="text"
-          placeholder="Type something"
-          onChange={(e) => setData(e.target.value)}
-        />
-        <Button onClick={handleSubmit}>Submit</Button>
+    <div className="w-full max-w-5xl mx-auto py-8">
+      <div className="grid grid-cols-3 gap-2">
+        {urls.map((url, index) => (
+          <div
+            key={url}
+            className="h-64 bg-secondary flex items-center justify-center"
+          >
+            <img
+              src={url || ""}
+              alt={`Screenshot ${index + 1}`}
+              className="w-4/5"
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
