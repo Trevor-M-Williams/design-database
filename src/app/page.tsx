@@ -1,40 +1,31 @@
-import { ref, listAll, getDownloadURL } from "firebase/storage";
-import { storage } from "@/db/firebase";
+import { db } from "@/db/firebase";
+import { collection, getDocs } from "firebase/firestore";
+
+import ImageGrid from "@/components/image-grid";
+
+async function fetchData() {
+  try {
+    const colrRef = collection(db, "images");
+    const snap = await getDocs(colrRef);
+    const data = snap.docs
+      .map((doc) => {
+        return doc.data() as ImageMetadata;
+      })
+      .sort((a, b) => {
+        return (
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+      });
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching data from Firestore:", error);
+    return [];
+  }
+}
 
 export default async function Home() {
-  const imagesRef = ref(storage, "/");
+  const data = await fetchData();
 
-  const res = await listAll(imagesRef);
-  const urls = await Promise.all(
-    res.items
-      .map(async (imageRef) => {
-        try {
-          const url = await getDownloadURL(imageRef);
-          return url;
-        } catch (error) {
-          console.error("Error fetching image URL:", error);
-          return null;
-        }
-      })
-      .filter((url) => url !== null)
-  );
-
-  return (
-    <div className="w-full max-w-5xl mx-auto py-8">
-      <div className="grid grid-cols-3 gap-2">
-        {urls.map((url, index) => (
-          <div
-            key={url}
-            className="h-64 bg-secondary flex items-center justify-center"
-          >
-            <img
-              src={url || ""}
-              alt={`Screenshot ${index + 1}`}
-              className="w-4/5"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return <ImageGrid data={data} />;
 }

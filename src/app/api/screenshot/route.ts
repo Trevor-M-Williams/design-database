@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/db/firebase";
+import { db, storage } from "@/db/firebase";
+import { addDoc, collection } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const options = {
   status: 200,
@@ -20,19 +21,47 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
     await postToFirebase(data);
-    return NextResponse.json({ message: "Success" }, options);
+    return NextResponse.json(
+      { message: "Image uploaded successfully!" },
+      options
+    );
   } catch (error) {
-    return NextResponse.json({ error }, options);
+    console.log("Error:", error);
+    return NextResponse.json({ error }, { ...options, status: 500 });
   }
 }
 
-async function postToFirebase(dataUrl: string) {
-  const storageRef = ref(storage, "test2.jpg");
-  const blob = base64ToBlob(dataUrl, "image/jpeg");
+async function postToFirebase(data: ImageCaptureData) {
+  const name = data.name;
+  const source = data.source;
+  const siteId = source.split("/")[2];
+  const fileName = `${name}_${Date.now()}.jpg`;
+  const storageRef = ref(storage, fileName);
+  const blob = base64ToBlob(data.dataUrl, "image/jpeg");
 
-  uploadBytes(storageRef, blob).then((snapshot) => {
-    console.log("Uploaded a blob!");
-  });
+  try {
+    const snapshot = await uploadBytes(storageRef, blob);
+    const imageUrl = await getDownloadURL(snapshot.ref);
+
+    const metadata = {
+      name,
+      imageUrl,
+      source,
+      siteId,
+      tags: data.tags,
+      timestamp: data.timestamp,
+    };
+
+    const mainColRef = collection(db, "images");
+    const siteColRef = collection(db, "sites", siteId, "images");
+
+    await addDoc(mainColRef, metadata);
+    await addDoc(siteColRef, metadata);
+
+    console.log("Image uploaded and metadata stored in Firestore!");
+  } catch (error) {
+    console.error("Error uploading image and storing metadata:", error);
+  }
 }
 
 function base64ToBlob(base64: string, contentType: string) {
