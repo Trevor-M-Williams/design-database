@@ -1,5 +1,4 @@
 type ImageCaptureData = {
-  name: string;
   dataUrl: string;
   source: string;
   tags: string[];
@@ -7,7 +6,6 @@ type ImageCaptureData = {
 };
 
 type ImageMetadata = {
-  name: string;
   imageUrl: string;
   source: string;
   siteId: string;

@@ -6,7 +6,7 @@ import ArrowIcon from "@mui/icons-material/ArrowOutwardRounded";
 
 export default function ImageModal({ data }: { data: ImageMetadata }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { name, imageUrl, source, siteId } = data;
+  const { imageUrl, source, siteId } = data;
 
   return (
     <div className="relative">

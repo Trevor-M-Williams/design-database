@@ -48,14 +48,14 @@ export default async function ProfilePage({
         </Link>
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 items-center">
         {data.map((imageData, i) => (
-          <div key={i} className="">
+          <div key={i}>
             <img
               src={imageData.imageUrl}
               alt={`${siteId}-${i}`}
               draggable="false"
-              className="w-full rounded-lg shadow-lg object-cover"
+              className="max-h-[95vh] max-w-full rounded-lg shadow-lg object-cover"
             />
           </div>
         ))}

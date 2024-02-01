@@ -33,10 +33,9 @@ export async function POST(request: Request) {
 }
 
 async function postToFirebase(data: ImageCaptureData) {
-  const name = data.name;
   const source = data.source;
   const siteId = source.split("/")[2];
-  const fileName = `${name}_${Date.now()}.jpg`;
+  const fileName = `${siteId}_${Date.now()}.jpg`;
   const storageRef = ref(storage, fileName);
   const blob = base64ToBlob(data.dataUrl, "image/jpeg");
 
@@ -45,7 +44,6 @@ async function postToFirebase(data: ImageCaptureData) {
     const imageUrl = await getDownloadURL(snapshot.ref);
 
     const metadata = {
-      name,
       imageUrl,
       source,
       siteId,
