@@ -5,8 +5,8 @@ import ImageGrid from "@/components/image-grid";
 
 async function fetchData() {
   try {
-    const colrRef = collection(db, "images");
-    const snap = await getDocs(colrRef);
+    const colRef = collection(db, "images");
+    const snap = await getDocs(colRef);
     const data = snap.docs
       .map((doc) => {
         return doc.data() as ImageMetadata;
