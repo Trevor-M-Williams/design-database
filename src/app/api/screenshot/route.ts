@@ -56,8 +56,8 @@ async function postToFirebase(data: ImageCaptureData) {
     const mainColRef = collection(db, "images");
     const siteColRef = collection(db, "sites", siteId, "images");
 
-    await addDoc(mainColRef, metadata);
-    await addDoc(siteColRef, metadata);
+    const newDoc = await addDoc(mainColRef, metadata);
+    await addDoc(siteColRef, { imageRef: newDoc.id });
 
     revalidatePath("/");
 

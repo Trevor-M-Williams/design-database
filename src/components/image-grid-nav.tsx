@@ -19,40 +19,50 @@ export default function ImageGridNav({
   }>({});
 
   const filterSections = {
-    Sections: ["contact", "cta", "features", "footer", "hero", "team"],
+    Sections: [
+      "contact",
+      "cta",
+      "features",
+      "footer",
+      "hero",
+      "logos",
+      "team",
+      "text",
+    ],
     Elements: [
       "banner",
       "button",
       "card",
       "form",
       "grid",
+      "image",
       "menu",
       "nav",
-      "sidebar",
       "slider",
       "tabs",
     ],
-    Colors: ["colorful", "dark", "light", "muted", "gradient", "vibrant"],
-    Styles: ["brutalist", "flat", "glass", "minimal", "modern"],
-    Themes: [
-      "artistic",
+    Colors: ["colorful", "dark", "gradient", "muted", "vibrant"],
+    Styles: [
       "corporate",
-      "eco",
-      "elegant",
       "designer",
+      "elegant",
+      "flat",
       "fun",
-      "luxury",
+      "glass",
+      "minimal",
       "tech",
     ],
-    Animations: ["load", "parallax", "scroll", "transition"],
     Misc: [
       "accent",
       "background",
       "icon",
       "illustration",
-      "logo",
+      "overlap",
       "photography",
+      "rounded",
+      "sharp",
       "typography",
+      "whitespace",
     ],
   };
 
@@ -94,11 +104,11 @@ export default function ImageGridNav({
           </div>
         </DialogTrigger>
         <DialogContent>
-          <div className="flex justify-between max-h-[75vh] overflow-auto">
+          <div className="flex justify-between max-h-[75vh] overflow-auto p-4">
             {Object.entries(filterSections).map(
               ([section, filters], sectionIndex) => (
                 <div key={sectionIndex} className="mb-2">
-                  <h3 className="font-semibold">{section}</h3>
+                  <h3 className="text-lg font-semibold">{section}</h3>
                   <div className="">
                     {filters.map((filter, filterIndex) => (
                       <div

@@ -10,6 +10,7 @@ type ImageMetadata = {
   name: string;
   imageUrl: string;
   source: string;
+  siteId: string;
   tags: string[];
   timestamp: number;
 };

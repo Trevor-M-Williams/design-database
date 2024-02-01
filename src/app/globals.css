@@ -77,18 +77,19 @@
 
 /* custom scrolbar */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
+  background: inherit;
+  padding: 0 2px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 6px;
-  border: 3px solid white;
+  border: 3px solid inherit;
 }
 
 ::-webkit-scrollbar-thumb:hover {

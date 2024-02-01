@@ -7,9 +7,9 @@ export default function ImageGrid({ data }: { data: ImageMetadata[] }) {
   const [filteredData, setFilteredData] = useState(data);
 
   return (
-    <div className="relative w-full max-w-screen-2xl mx-auto py-8 px-4">
+    <div className="relative w-full max-w-screen-2xl mx-auto p-8">
       <div className="flex items-center gap-8 mb-4">
-        <h1 className="text-3xl font-bold">Gallery</h1>
+        <h1 className="text-3xl font-semibold">Gallery</h1>
         <ImageGridNav data={data} setFilteredData={setFilteredData} />
       </div>
 
