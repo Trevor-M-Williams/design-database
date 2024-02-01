@@ -1,5 +1,6 @@
-import { fetchData } from "@/db/actions";
+export const dynamic = "force-dynamic";
 
+import { fetchData } from "@/db/actions";
 import ImageGrid from "@/components/image-grid";
 
 export default async function Home() {
