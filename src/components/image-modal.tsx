@@ -10,7 +10,7 @@ export default function ImageModal({ data }: { data: ImageMetadata }) {
 
   return (
     <div className="relative">
-      <div className="group h-64 bg-secondary flex justify-center shadow rounded overflow-hidden">
+      <div className="group h-64 bg-secondary flex justify-center shadow-lg rounded overflow-hidden">
         <img
           src={imageUrl}
           alt="Image"

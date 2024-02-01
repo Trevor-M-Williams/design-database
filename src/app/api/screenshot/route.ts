@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 import { db, storage } from "@/db/firebase";
 import { addDoc, collection } from "firebase/firestore";
@@ -57,6 +58,8 @@ async function postToFirebase(data: ImageCaptureData) {
 
     await addDoc(mainColRef, metadata);
     await addDoc(siteColRef, metadata);
+
+    revalidatePath("/");
 
     console.log("Image uploaded and metadata stored in Firestore!");
   } catch (error) {

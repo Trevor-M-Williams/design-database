@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
+
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogClose,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import ClearFiltersIcon from "@mui/icons-material/DeleteOutlined";
+import RemoveFilterIcon from "@mui/icons-material/HighlightOff";
 
 export default function ImageGridNav({
   data,
@@ -29,7 +27,6 @@ export default function ImageGridNav({
       "form",
       "grid",
       "menu",
-      "multi-step form",
       "nav",
       "sidebar",
       "slider",
@@ -86,23 +83,23 @@ export default function ImageGridNav({
   }, [selectedFilters]);
 
   return (
-    <div className="">
+    <div className="flex flex-grow items-center overflow-hidden">
       <Dialog>
         <DialogTrigger>
-          <Button
-            variant={"outline"}
+          <div
+            className="border rounded hover:bg-secondary px-3 py-2"
             onClick={() => setIsModalOpen(!isModalOpen)}
           >
             Filters
-          </Button>
+          </div>
         </DialogTrigger>
         <DialogContent>
-          <div className="max-h-[75vh] overflow-auto">
+          <div className="flex justify-between max-h-[75vh] overflow-auto">
             {Object.entries(filterSections).map(
               ([section, filters], sectionIndex) => (
                 <div key={sectionIndex} className="mb-2">
                   <h3 className="font-semibold">{section}</h3>
-                  <div className="grid grid-cols-4 gap-x-6">
+                  <div className="">
                     {filters.map((filter, filterIndex) => (
                       <div
                         key={filterIndex}
@@ -126,6 +123,41 @@ export default function ImageGridNav({
           </div>
         </DialogContent>
       </Dialog>
+
+      <Button
+        variant={"outline"}
+        size={"icon"}
+        className="ml-2"
+        onClick={() => {
+          setFilteredData(data);
+          setSelectedFilters({});
+        }}
+      >
+        <ClearFiltersIcon />
+      </Button>
+
+      <div className="flex w-full gap-2 overflow-x-auto ml-2">
+        {Object.entries(selectedFilters).map(([filter, active], i) => {
+          if (active) {
+            return (
+              <div
+                key={i}
+                className="flex items-center bg-secondary rounded px-2 py-1"
+              >
+                {filter}
+
+                <RemoveFilterIcon
+                  fontSize="small"
+                  className="ml-2 cursor-pointer"
+                  onClick={() => {
+                    toggleFilter(filter);
+                  }}
+                />
+              </div>
+            );
+          }
+        })}
+      </div>
     </div>
   );
 }
